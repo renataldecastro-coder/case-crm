@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Case Analista de CRM</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --card: #ffffff;
+    --ink: #1c2330;
+    --muted: #5b6577;
+    --line: #e3e7ee;
+    --accent: #0b6e99;
+    --accent-soft: #e6f2f8;
+    --warn: #9a5b00;
+    --warn-soft: #fff4e0;
+    --head: #f1f4f8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12161d;
+      --card: #1a2029;
+      --ink: #e7ebf1;
+      --muted: #9aa5b6;
+      --line: #2c3440;
+      --accent: #5bb8e0;
+      --accent-soft: #16303d;
+      --warn: #f0b45a;
+      --warn-soft: #33270f;
+      --head: #212833;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12161d; --card: #1a2029; --ink: #e7ebf1; --muted: #9aa5b6; --line: #2c3440;
+    --accent: #5bb8e0; --accent-soft: #16303d; --warn: #f0b45a; --warn-soft: #33270f; --head: #212833;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+  header.hero { padding: 48px 0 28px; }
+  .eyebrow { color: var(--accent); font-weight: 600; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+  h1 { font-size: 30px; line-height: 1.2; margin: 6px 0 12px; }
+  .lead { color: var(--muted); font-size: 17px; max-width: 680px; margin: 0; }
+
+  nav.steps {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  nav.steps ol {
+    list-style: none; margin: 0 auto; padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); max-width: 960px;
+    display: flex; gap: 8px; overflow-x: auto;
+  }
+  nav.steps a {
+    display: flex; align-items: center; gap: 8px; white-space: nowrap;
+    padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--card); color: var(--ink); text-decoration: none; font-size: 14px;
+  }
+  nav.steps a:hover, nav.steps a:focus-visible { border-color: var(--accent); outline: none; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  nav.steps .n {
+    width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--accent); color: #fff; font-size: 12px; font-weight: 700;
+  }
+
+  section.card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 28px; margin: 24px 0;
+  }
+  .step-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
+  .badge {
+    flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
+    background: var(--accent); color: #fff; font-size: 20px; font-weight: 700;
+  }
+  .step-label { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+  h2 { font-size: 22px; margin: 0; line-height: 1.25; }
+  h3 { font-size: 16px; margin: 24px 0 8px; }
+  p { margin: 8px 0; }
+  .intro { color: var(--muted); margin: 12px 0 4px; }
+
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
+  .chip { font-size: 13px; padding: 4px 10px; border-radius: 999px; background: var(--head); color: var(--muted); }
+
+  .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; margin: 10px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: var(--head); font-weight: 600; white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.id { font-weight: 700; white-space: nowrap; }
+  table.wide td { white-space: nowrap; }
+
+  .note {
+    background: var(--head); border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 14px; color: var(--muted);
+  }
+  .note strong { color: var(--ink); }
+  .rules { background: var(--warn-soft); border-radius: 10px; padding: 12px 16px 12px 16px; margin: 12px 0; }
+  .rules h3 { margin: 0 0 6px; color: var(--warn); }
+  .rules ul { margin: 0; padding-left: 20px; }
+
+  .task {
+    border: 2px solid var(--accent); background: var(--accent-soft);
+    border-radius: 12px; padding: 16px 20px; margin-top: 22px;
+  }
+  .task h3 { margin: 0 0 8px; color: var(--accent); display: flex; align-items: center; gap: 8px; }
+  .task ol { margin: 0; padding-left: 22px; }
+  .task li { margin: 6px 0; }
+
+  ul.plain { padding-left: 20px; }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; word-break: break-all; }
+  .diff { color: var(--warn); }
+
+  footer { color: var(--muted); font-size: 14px; text-align: center; padding: 24px 0 48px; }
+
+  @media (max-width: 600px) {
+    section.card { padding: 20px 16px; }
+    h1 { font-size: 24px; }
+    .badge { width: 38px; height: 38px; font-size: 17px; }
+  }
+  @media print {
+    nav.steps { display: none; }
+    section.card { break-inside: avoid-page; border-color: #ccc; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Processo seletivo · Case prático</div>
+    <h1>Analista de CRM Pleno — Email Marketing &amp; WhatsApp</h1>
+    <p class="lead">Este case simula a rotina real da vaga: revisar o que saiu ontem, montar e conferir disparos, escolher a base certa para cada envio e ler um funil simples. O que mais pesa é a <strong>atenção a detalhe</strong>: erros em disparo chegam a milhares de clientes e não têm volta.</p>
+  </div>
+</header>
+
+<nav class="steps" aria-label="Etapas do case">
+  <ol>
+    <li><a href="#inicio"><span class="n">i</span>Instruções</a></li>
+    <li><a href="#parte1"><span class="n">1</span>Rotina da manhã</a></li>
+    <li><a href="#parte2"><span class="n">2</span>Revisão de email</a></li>
+    <li><a href="#parte3"><span class="n">3</span>WhatsApp</a></li>
+    <li><a href="#parte4"><span class="n">4</span>Segmentação</a></li>
+    <li><a href="#parte5"><span class="n">5</span>KPIs e funil</a></li>
+  </ol>
+</nav>
+
+<main class="wrap">
+
+<!-- INSTRUÇÕES -->
+<section class="card" id="inicio">
+  <div class="step-head">
+    <div class="badge">i</div>
+    <div><div class="step-label">Antes de começar</div><h2>Instruções</h2></div>
+  </div>
+  <p class="intro"><strong>Cenário:</strong> você é analista de CRM de uma marca de suplementos com e-commerce próprio. Opera email marketing e WhatsApp seguindo um calendário de disparos definido pelo time. Todos os dados são fictícios.</p>
+
+  <div class="meta">
+    <span class="chip">Prazo: até 48h após o recebimento</span>
+    <span class="chip">Tempo estimado: 3 a 4 horas</span>
+    <span class="chip">Formato livre: documento, planilha ou PDF</span>
+  </div>
+
+  <ul class="plain">
+    <li>Responda as 5 partes. Pode ser em tópicos: clareza vale mais que estética.</li>
+    <li>Se alguma informação faltar, escreva a premissa que você assumiu e siga.</li>
+    <li>Pode usar qualquer ferramenta de apoio, mas as respostas devem refletir como <strong>você</strong> trabalharia no dia a dia.</li>
+  </ul>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Parte</th><th>Tema</th><th>O que avaliamos</th></tr></thead>
+      <tbody>
+        <tr><td class="id">1</td><td>Rotina da manhã: o que aconteceu ontem</td><td>Leitura de relatório, senso de gravidade, ação</td></tr>
+        <tr><td class="id">2</td><td>Revisão de email antes do disparo</td><td>Atenção a detalhe, QA</td></tr>
+        <tr><td class="id">3</td><td>WhatsApp: template, segmentação e programação</td><td>Domínio de ferramenta e de regras do canal</td></tr>
+        <tr><td class="id">4</td><td>Segmentação: qual base para cada disparo</td><td>Leitura de base, escolha de público, exclusões</td></tr>
+        <tr><td class="id">5</td><td>KPIs e funil</td><td>Entendimento básico de funil de vendas</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- PARTE 1 -->
+<section class="card" id="parte1">
+  <div class="step-head">
+    <div class="badge">1</div>
+    <div><div class="step-label">Parte 1</div><h2>Rotina da manhã: o que aconteceu ontem</h2></div>
+  </div>
+  <p class="intro">Hoje é 14/10, 8h30. Antes de montar os disparos do dia, você confere o relatório de tudo que estava programado para ontem (13/10).</p>
+
+  <div class="table-scroll">
+    <table class="wide">
+      <thead>
+        <tr>
+          <th>#</th><th>Canal</th><th>Campanha</th><th>Segmento</th>
+          <th class="num">Base planejada</th><th>Horário (programado → real)</th>
+          <th class="num">Enviados</th><th class="num">Entregues</th>
+          <th class="num">Aberturas / Leituras</th><th class="num">Cliques</th>
+          <th class="num">Descadastros / Opt-out</th><th>Status na ferramenta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="id">E1</td><td>Email</td><td>Newsletter semanal</td><td>Base ativa engajada 90d</td><td class="num">180.000</td><td>08:00 → 08:00</td><td class="num">179.400</td><td class="num">177.800</td><td class="num">33.800</td><td class="num">2.840</td><td class="num">120</td><td>Enviado</td></tr>
+        <tr><td class="id">E2</td><td>Email</td><td>Lançamento Colágeno</td><td>Compradores de colágeno 180d</td><td class="num">42.000</td><td>10:00 → 10:00</td><td class="num">418.000</td><td class="num">409.500</td><td class="num">61.000</td><td class="num">5.200</td><td class="num">2.900</td><td>Enviado</td></tr>
+        <tr><td class="id">E3</td><td>Email</td><td>Carrinho abandonado (automação)</td><td>Gatilho: carrinho abandonado</td><td class="num">—</td><td>Contínuo</td><td class="num">1.850</td><td class="num">1.830</td><td class="num">820</td><td class="num">0</td><td class="num">2</td><td>Ativo</td></tr>
+        <tr><td class="id">E4</td><td>Email</td><td>Cupom de aniversário</td><td>Aniversariantes do dia</td><td class="num">1.200</td><td>09:00 → —</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td>Programado</td></tr>
+        <tr><td class="id">E5</td><td>Email</td><td>Recompra Whey</td><td>Compradores de whey há 25–35 dias</td><td class="num">15.000</td><td>14:00 → 14:00</td><td class="num">15.000</td><td class="num">14.850</td><td class="num">3.100</td><td class="num">410</td><td class="num">18</td><td>Enviado</td></tr>
+        <tr><td class="id">E6</td><td>Email</td><td>Recompra Whey</td><td>Compradores de whey há 25–35 dias</td><td class="num">15.000</td><td>14:05 → 14:05</td><td class="num">15.000</td><td class="num">14.850</td><td class="num">1.900</td><td class="num">150</td><td class="num">96</td><td>Enviado</td></tr>
+        <tr><td class="id">E7</td><td>Email</td><td>Reativação de inativos</td><td>Sem compra há 12+ meses</td><td class="num">60.000</td><td>16:00 → 16:00</td><td class="num">60.000</td><td class="num">54.600</td><td class="num">2.100</td><td class="num">150</td><td class="num">310</td><td>Enviado</td></tr>
+        <tr><td class="id">W1</td><td>WhatsApp</td><td>Lançamento Colágeno</td><td>Opt-in WA, compradores de colágeno</td><td class="num">8.000</td><td>11:00 → 11:00</td><td class="num">8.000</td><td class="num">7.840</td><td class="num">5.900</td><td class="num">610</td><td class="num">45</td><td>Enviado</td></tr>
+        <tr><td class="id">W2</td><td>WhatsApp</td><td>Últimas horas: cupom CRIANCA15 (válido até 12/10)</td><td>Opt-in WA, base ativa</td><td class="num">6.000</td><td>10:00 → 10:00</td><td class="num">6.000</td><td class="num">5.880</td><td class="num">4.300</td><td class="num">520</td><td class="num">30</td><td>Enviado</td></tr>
+        <tr><td class="id">W3</td><td>WhatsApp</td><td>Reposição de estoque Ômega 3</td><td>Lista de espera Ômega 3</td><td class="num">2.200</td><td>15:00 → 15:00</td><td class="num">2.200</td><td class="num">1.320</td><td class="num">1.010</td><td class="num">260</td><td class="num">5</td><td>Concluído com falhas</td></tr>
+        <tr><td class="id">W4</td><td>WhatsApp</td><td>Lembrete frete grátis</td><td>Opt-in WA, carrinho 7d</td><td class="num">3.500</td><td>18:00 → 22:40</td><td class="num">3.500</td><td class="num">3.420</td><td class="num">1.100</td><td class="num">90</td><td class="num">140</td><td>Enviado</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <strong>Referências da casa (médias normais)</strong><br>
+    Email — entrega ≥ 97%, abertura 18–22%, CTR 1,5–2%, descadastro &lt; 0,1%.<br>
+    WhatsApp — entrega ≥ 97%, leitura 70–80%, opt-out &lt; 1%, disparos só entre 9h e 20h.
+  </div>
+
+  <div class="task">
+    <h3>✎ Responda</h3>
+    <ol>
+      <li>Liste tudo o que chamou sua atenção no relatório, do mais grave para o menos grave. Para cada item, diga por que é um problema.</li>
+      <li>Para cada problema: o que você faz agora, o que investiga e quem você avisa.</li>
+      <li>Quais desses problemas poderiam ter sido evitados antes do disparo? Com qual verificação?</li>
+      <li>Escreva a mensagem de status que você mandaria para o time no Slack às 9h (até 10 linhas).</li>
+    </ol>
+  </div>
+</section>
+
+<!-- PARTE 2 -->
+<section class="card" id="parte2">
+  <div class="step-head">
+    <div class="badge">2</div>
+    <div><div class="step-label">Parte 2</div><h2>Revisão de email antes do disparo</h2></div>
+  </div>
+  <p class="intro">Um colega montou o email da campanha "Semana do Ômega 3" na ferramenta e pediu sua revisão antes de liberar. Compare o briefing com o que foi configurado.</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Item</th><th>Briefing (o que foi pedido)</th><th>Configurado na ferramenta</th></tr></thead>
+      <tbody>
+        <tr><td class="id">Assunto</td><td>Sua dose de Ômega com 20% OFF</td><td>Sua dose de Ômega com 20% OFF</td></tr>
+        <tr><td class="id">Pré-header</td><td>Só até 19/10 — use o cupom OMEGA20</td><td>Só até 18/10 — use o cupom OMEGA20</td></tr>
+        <tr><td class="id">Remetente</td><td>Ocean Drop &lt;news@oceandrop.com.br&gt;</td><td>Ocean Drop &lt;news@oceandrop.com.br&gt;</td></tr>
+        <tr><td class="id">Saudação</td><td>Olá, {nome}</td><td>Olá, {{primeiro_nome}}, (sem valor padrão; 12% da base não tem nome cadastrado)</td></tr>
+        <tr><td class="id">Texto principal</td><td>Use o cupom OMEGA20 e garanta 20% OFF em toda a linha Ômega 3, de 15/10 a 19/10</td><td>Use o cupom OMEGA15 e garanta 20% OFF em toda a linha Ômega 3, de 15/10 a 19/10</td></tr>
+        <tr><td class="id">Botão "Comprar agora"</td><td class="mono">oceandrop.com.br/omega-3?utm_campaign=semana_omega_out26</td><td class="mono">oceandrop.com.br/colageno?utm_campaign=semana_omega_out26</td></tr>
+        <tr><td class="id">Link do banner</td><td class="mono">oceandrop.com.br/omega-3?utm_campaign=semana_omega_out26</td><td class="mono">oceandrop.com.br/omega-3?utm_campaign=semana_colageno_out26</td></tr>
+        <tr><td class="id">Segmento</td><td>Compradores de Ômega 3 nos últimos 12 meses, <strong>excluindo</strong> quem comprou nos últimos 30 dias</td><td>Compradores de Ômega 3 — 12 meses</td></tr>
+        <tr><td class="id">Agendamento</td><td>15/10/2026 às 09:00</td><td>15/10/2026 09:00 PM</td></tr>
+        <tr><td class="id">Rodapé</td><td>Endereço da empresa, redes sociais e link de descadastro</td><td>Endereço da empresa e redes sociais</td></tr>
+        <tr><td class="id">Teste</td><td>Enviar teste para o grupo de aprovação</td><td>Teste enviado só para o email do autor, aberto no desktop</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="task">
+    <h3>✎ Responda</h3>
+    <ol>
+      <li>Liste todos os erros que você encontrou e o impacto de cada um se o email saísse assim.</li>
+      <li>Descreva o seu checklist de QA antes de programar <strong>qualquer</strong> email: o que confere, em que ordem, em quais dispositivos e clientes de email testa, e quem aprova.</li>
+      <li>São 8h45, o email está programado para 9h e você percebe um erro no cupom. O que você faz, passo a passo?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- PARTE 3 -->
+<section class="card" id="parte3">
+  <div class="step-head">
+    <div class="badge">3</div>
+    <div><div class="step-label">Parte 3</div><h2>WhatsApp: template, segmentação e programação</h2></div>
+  </div>
+  <p class="intro">O calendário prevê um disparo de WhatsApp de apoio à Semana do Ômega 3. A lista do segmento foi criada em 13/10, três dias antes do disparo.</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Campo</th><th>Definição do calendário</th></tr></thead>
+      <tbody>
+        <tr><td class="id">Campanha</td><td>Lembrete Semana do Ômega 3</td></tr>
+        <tr><td class="id">Data e hora</td><td>16/10, 11:00</td></tr>
+        <tr><td class="id">Público</td><td>Quem abriu ou clicou no email da Semana do Ômega 3 (15/10) e ainda não comprou</td></tr>
+        <tr><td class="id">Oferta</td><td>20% OFF na linha Ômega 3 com o cupom OMEGA20, até 19/10</td></tr>
+        <tr><td class="id">Destino</td><td class="mono">oceandrop.com.br/omega-3</td></tr>
+        <tr><td class="id">Regra da casa</td><td>Cada cliente recebe no máximo 1 WhatsApp de marketing a cada 48h</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="task">
+    <h3>✎ Responda</h3>
+    <ol>
+      <li>Escreva o template como ele seria submetido à Meta: categoria, texto (máx. 550 caracteres), variáveis e botão. Diga o que entra em cada variável e o que acontece se ela vier vazia.</li>
+      <li>Descreva a segmentação passo a passo: critérios de inclusão, exclusões obrigatórias e a lógica (E / OU) entre eles.</li>
+      <li>A lista foi criada em 13/10 e o disparo é em 16/10. Que cuidado você toma com isso na ferramenta?</li>
+      <li>Liste o que você confere antes de clicar em "programar".</li>
+      <li>Às 10h do dia 16/10 a Meta reprova o template. O que você faz?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- PARTE 4 -->
+<section class="card" id="parte4">
+  <div class="step-head">
+    <div class="badge">4</div>
+    <div><div class="step-label">Parte 4</div><h2>Segmentação: qual base para cada disparo</h2></div>
+  </div>
+  <p class="intro">Abaixo estão o retrato da base hoje e o calendário de disparos da próxima semana. Seu trabalho é escolher a base certa para cada disparo e justificar.</p>
+
+  <h3>Retrato da base (email)</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Segmento</th><th class="num">Contatos</th><th class="num">% da base com opt-in</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Base com opt-in de email ativo</strong></td><td class="num"><strong>470.000</strong></td><td class="num">100%</td></tr>
+        <tr><td>Engajados 90d (abriu ou clicou)</td><td class="num">180.000</td><td class="num">38%</td></tr>
+        <tr><td>Engajados 91–180d</td><td class="num">70.000</td><td class="num">15%</td></tr>
+        <tr><td>Sem engajamento há 180d+</td><td class="num">220.000</td><td class="num">47%</td></tr>
+        <tr><td>Clientes (1+ compra na vida)</td><td class="num">210.000</td><td class="num">45%</td></tr>
+        <tr><td>Compraram nos últimos 90d</td><td class="num">48.000</td><td class="num">10%</td></tr>
+        <tr><td>Recorrentes (3+ pedidos em 12m)</td><td class="num">22.000</td><td class="num">5%</td></tr>
+        <tr><td>Sem compra há 12m+</td><td class="num">95.000</td><td class="num">20%</td></tr>
+        <tr><td>Leads (nunca compraram)</td><td class="num">260.000</td><td class="num">55%</td></tr>
+        <tr><td>Leads cadastrados nos últimos 30d</td><td class="num">14.000</td><td class="num">3%</td></tr>
+        <tr><td>Assinantes ativos (compra recorrente automática)</td><td class="num">9.500</td><td class="num">2%</td></tr>
+        <tr><td>Opt-in de WhatsApp ativo</td><td class="num">64.000</td><td class="num">14%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">
+    <strong>Compradores por categoria (últimos 12 meses):</strong> Whey 38.000 · Colágeno 42.000 · Ômega 3 27.000 · Creatina 18.000.<br>
+    Os segmentos se sobrepõem: um cliente recorrente pode estar em várias linhas e categorias.
+  </div>
+
+  <div class="rules">
+    <h3>⚠ Regras da casa</h3>
+    <ul>
+      <li>No máximo 1 email promocional por cliente por dia (newsletter de conteúdo não conta).</li>
+      <li>WhatsApp de marketing: no máximo 1 a cada 48h, só para opt-in ativo.</li>
+      <li>Assinantes não recebem cupom de desconto: já têm preço de assinante.</li>
+      <li>Cupom de primeira compra só funciona para quem nunca comprou.</li>
+    </ul>
+  </div>
+
+  <h3>Calendário da semana</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>#</th><th>Data</th><th>Canal</th><th>Disparo</th><th>Objetivo</th></tr></thead>
+      <tbody>
+        <tr><td class="id">S1</td><td>27/10</td><td>Email</td><td>Newsletter semanal (conteúdo, sem oferta)</td><td>Engajamento</td></tr>
+        <tr><td class="id">S2</td><td>28/10</td><td>Email</td><td>Esquenta Black Friday: acesso antecipado para os melhores clientes</td><td>Receita e fidelização</td></tr>
+        <tr><td class="id">S3</td><td>28/10</td><td>Email</td><td>Lançamento: creatina sabor limão</td><td>Receita</td></tr>
+        <tr><td class="id">S4</td><td>29/10</td><td>WhatsApp</td><td>Últimas unidades de Ômega 3 com 15% OFF</td><td>Girar estoque</td></tr>
+        <tr><td class="id">S5</td><td>30/10</td><td>Email</td><td>Reativação: "sentimos sua falta" com 20% OFF</td><td>Recuperar clientes</td></tr>
+        <tr><td class="id">S6</td><td>31/10</td><td>Email</td><td>Cupom de 10% na primeira compra</td><td>Converter leads</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="task">
+    <h3>✎ Responda</h3>
+    <ol>
+      <li>Leitura da base: o que esse retrato te diz? Traga 3 observações e 1 risco, com números.</li>
+      <li>Para cada disparo (S1 a S6), monte a segmentação: base de inclusão, exclusões, tamanho estimado e por que escolheu essa base. Pode responder em tabela. Se o tamanho depender de um cruzamento que você não tem, diga como chegaria a ele na ferramenta.</li>
+      <li>Algum disparo do calendário conflita com as regras da casa? Como você resolveria?</li>
+      <li>A reativação (S5) poderia sair para os 220.000 sem engajamento de uma vez? O que você faria?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- PARTE 5 -->
+<section class="card" id="parte5">
+  <div class="step-head">
+    <div class="badge">5</div>
+    <div><div class="step-label">Parte 5</div><h2>KPIs e funil</h2></div>
+  </div>
+  <p class="intro">Duas campanhas de email da mesma semana, ambas com 15% OFF:</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Métrica</th><th class="num">Campanha A — base ativa 180d</th><th class="num">Campanha B — compradores recorrentes</th></tr></thead>
+      <tbody>
+        <tr><td>Enviados</td><td class="num">100.000</td><td class="num">40.000</td></tr>
+        <tr><td>Entregues</td><td class="num">98.000</td><td class="num">39.200</td></tr>
+        <tr><td>Aberturas únicas</td><td class="num">19.600</td><td class="num">11.760</td></tr>
+        <tr><td>Cliques únicos</td><td class="num">2.450</td><td class="num">1.176</td></tr>
+        <tr><td>Pedidos</td><td class="num">98</td><td class="num">71</td></tr>
+        <tr><td>Receita (R$)</td><td class="num">17.640</td><td class="num">15.620</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="task">
+    <h3>✎ Responda</h3>
+    <ol>
+      <li>Calcule, para cada campanha: taxa de entrega, taxa de abertura, CTR, CTOR (cliques sobre aberturas), conversão (pedidos sobre cliques), ticket médio e receita por email entregue.</li>
+      <li>Qual campanha performou melhor? Justifique em até 3 linhas.</li>
+      <li>Na semana seguinte, a receita da Campanha A caiu 40% com a mesma base. Em que etapa do funil você olharia primeiro, e o que cada etapa poderia indicar?</li>
+      <li>A taxa de abertura tem ficado menos confiável nos últimos anos. Por quê, e qual métrica você usaria no lugar para avaliar engajamento?</li>
+    </ol>
+  </div>
+</section>
+
+</main>
+
+<footer>Boa sorte! Em caso de dúvida sobre o case, fale com a pessoa recrutadora.</footer>
+
+
+</body>
+</html>
